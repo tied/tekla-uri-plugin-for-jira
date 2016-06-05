@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<atlassian-plugin key="${atlassian.plugin.key}" name="${project.name}" plugins-version="2">
+    <plugin-info>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <vendor name="${project.organization.name}" url="${project.organization.url}"/>
+        <param name="plugin-icon">images/pluginIcon.png</param>
+        <param name="plugin-logo">images/pluginLogo.png</param>
+    </plugin-info>
+
+    <!-- add our i18n resource -->
+    <resource type="i18n" name="i18n" location="tekla-uri-plugin"/>
+
+    <!-- add our web resources -->
+    <web-resource key="resources" name="tekla-uri-plugin Web Resources">
+        <dependency>com.atlassian.auiplugin:ajs</dependency>
+        <resource type="download" name="tekla-uri-plugin.css" location="/css/tekla-uri-plugin.css"/>
+        <resource type="download" name="tekla-uri-plugin.js" location="/js/tekla-uri-plugin.js"/>
+        <resource type="download" name="images/" location="/images"/>
+        <context>tekla-uri-plugin</context>
+    </web-resource>
+
+    <!-- Tekla Link type -->
+    <web-item key="add-tekla-link" section="create-issue-link-types" weight="50">
+        <label key="viewissue.links.types.teklalink"/>
+        <link linkId="add-tekla-link-link">/secure/AddTeklaLink!default.jspa?id=${issueId}</link>
+        <param name="focused-field-name" value="url"/>
+    </web-item>
+
+    <!-- Add Tekla Link action -->
+    <webwork1 key="issue-link-tekla" name="Link Issues With Tekla Structures" class="java.lang.Object">
+        <actions>
+            <action name="fi.sweco.jira.addon.tekla.AddTeklaLink" alias="AddTeklaLink">
+                <view name="error">/templates/dialog/addteklalink.vm</view>
+                <view name="input">/templates/dialog/addteklalink.vm</view>
+            </action>
+        </actions>
+    </webwork1>
+
+    <issue-link-renderer key="teklaIssueLinkRenderer" application-type="com.trimble.tekla" class="fi.sweco.jira.addon.tekla.TeklaIssueLinkRenderer">
+        <resource name="initial-view" type="velocity" location="templates/renderer/teklaissuelink.vm"/>
+        <resource name="final-view" type="velocity" location="templates/renderer/teklaissuelink.vm"/>
+    </issue-link-renderer>
+
+</atlassian-plugin>
